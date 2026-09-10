@@ -280,6 +280,14 @@ python3 -m http.server 8765
 - `.gitignore` + `README.md` 작성
 - 이 문서·오토메모리(`solaris_game_project.md`)의 경로 참조 모두 업데이트
 
+### v0.6 (2026-09-10) — 라이브 배포 · 계측 시작
+- **Vercel 배포 완료**: https://solaris-lime-nine.vercel.app (Hobby 플랜, GitHub main push 시 자동 재배포)
+- **Google Analytics 4 심음** — 측정 ID `G-E6FJ175S19` (SOLARIS 속성 · 웹 스트림 `SOLARIS Web` · 대한민국·KRW · 향상된 측정 ON)
+  - 자동 계측: 페이지뷰, 스크롤, 외부 링크 클릭, 이탈 클릭, 세션 지속시간
+  - 커스텀 이벤트 아직 없음. 필요 시 `gtag('event', 'game_start', {...})` 형태로 게임 시작·사망·보스 격파·업그레이드 구매 등 추적 가능
+- GA4 리포트 접근: https://analytics.google.com → SOLARIS 속성 → 실시간/잠재고객/참여도
+- 다음 마일스톤: itch.io 배포, 밸런스 튜닝 후 CrazyGames 퍼블리싱 신청
+
 ---
 
 _마지막 업데이트: 2026-09-10 · 다음 세션은 이 문서를 먼저 읽고 이어받으세요._
