@@ -276,7 +276,8 @@ python3 -m http.server 8765
 ### v0.5 (2026-09-10) — 위치 정리 · GitHub 준비
 - 프로젝트 위치 이동: `~/pest-hunter/` → `~/Documents/한상윤/project/solaris/`
 - 디렉토리 리네임: `pest-hunter` → `solaris` (게임명과 일치)
-- GitHub 리포 생성됨: `https://github.com/Yun7420/solaris` (Public, 초기 push는 다음 세션에서)
+- GitHub 리포 생성 + 초기 push 완료: `https://github.com/Yun7420/solaris` (Public, `main` 브랜치)
+- `.gitignore` + `README.md` 작성
 - 이 문서·오토메모리(`solaris_game_project.md`)의 경로 참조 모두 업데이트
 
 ---
