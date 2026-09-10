@@ -1,8 +1,8 @@
-# SOLARIS · 개발 진행 기록
+# SOLARIS · AI 인계 문서
 
 > 이 문서는 **다음 AI 세션이 이 프로젝트를 이어받아 작업할 수 있도록** 만든 인계 문서입니다.
-> 새 세션은 이 파일을 먼저 읽고, 필요하면 `index.html` 코드를 확인하세요.
-> 위치: `/Users/hansang-yun/Documents/한상윤/project/solaris/PROGRESS.md`
+> 진입점은 프로젝트 루트의 `CLAUDE.md`. 이 문서는 그 다음으로 읽는 상세본입니다.
+> 로드맵·작업 목록은 `ROADMAP.md` 참조.
 
 ---
 
@@ -11,10 +11,10 @@
 브라우저에서 바로 돌아가는 **Vampire Survivors 스타일 뱀서라이크** 게임. 사용자는 우주 컨셉·미니멀 톤·자동 발사 + 액티브 공격을 원함. 단일 HTML 파일, 빌드/의존성 없음.
 
 - **게임명**: SOLARIS
-- **현재 버전**: v0.4
-- **파일**: `/Users/hansang-yun/Documents/한상윤/project/solaris/index.html` (단일 파일, 약 1500줄)
-- **문서**: `/Users/hansang-yun/Documents/한상윤/project/solaris/PROGRESS.md` (이 파일)
-- **저장소**: GitHub `https://github.com/Yun7420/solaris` (아직 초기 push 전 · 다음 세션에서 진행)
+- **현재 버전**: v0.6
+- **Live**: https://solaris-lime-nine.vercel.app
+- **Repo**: https://github.com/Yun7420/solaris
+- **GA4**: `G-E6FJ175S19`
 
 ---
 
@@ -93,38 +93,39 @@ Vampire Survivors-like (bullet heaven) — **뇌빼고 하는 도파민 게임**
 ### 영구 강화 (SHOP_ITEMS)
 체력(+20HP) / 공격(+5%DMG) / 속도(+3%SPD) / 골드(+10%) / 자석(+25%픽업) / 쿨다운(-3%) / 부활(+1) / 장비(+1 시작 무기)
 
-### 개인 기록 (v0.4 신규)
+### 개인 기록
 `META.best = { time, kills, gold }` — 사망 시 갱신, 메뉴 상단에 표시. 갱신 시 게임오버 화면에 "▲ NEW BEST" 배지.
 
 ---
 
 ## 5. 코드 지도 (index.html 내부)
 
-파일 하나에 전부 인라인 (HTML + CSS + JS). 섹션 구분자 주석 참고.
+파일 하나에 전부 인라인 (HTML + CSS + JS). 섹션 구분자 주석 참고. 정확한 라인은 파일이 바뀌면 어긋날 수 있으니 grep 확인 우선.
 
 ```
-Line ~1-190       HTML: overlays (menu, levelup, gameover), HUD, canvas, styles
-Line ~200-260     Audio: procedural Web Audio SFX (beep + noiseBurst 조합)
-Line ~270-320     Meta state: DEFAULT_META, loadMeta/saveMeta, metaMul() 배율 헬퍼
-Line ~325-370     WEAPONS / PASSIVES 정의
-Line ~372-386     ENEMY_DEFS 정의
-Line ~388-450     Run state: state 객체 스키마, starfield/nebula 초기화, newRunState()
-Line ~455-490     Input: keys, mouse, event handlers
-Line ~495-560     Helpers: dist/randRange/spawnFloatText/spawnSparks/spawnDebris/shake/combo
-Line ~565-620     Spawning: spawnEnemyAt/spawnAtEdge/currentSpawnMix/updateSpawner
-Line ~625-700     Weapon stats: weaponStats(key) — level별 스탯 계산
-Line ~702-760     Basic attack: fireBasicAttack()  ← v0.4 신규
-Line ~762-830     Fire weapons: fireWeapon(key, stats)
-Line ~835-980     Update loop: update(dt) — 이동, 몹 AI, 발사체, 이펙트, 픽업, 레벨업 체크
-Line ~985-1020    Damage/Kill: damageEnemy() / killEnemy()
-Line ~1025-1090   Level up choices: triggerLevelUp() / pickLevelUpChoices() / applyChoice()
-Line ~1095-1250   Drawing primitives: drawOrb (player), drawAsteroid, drawScout,
+Line ~1-200       HTML: overlays (menu, levelup, gameover), HUD, canvas, styles
+                  GA4 gtag 스크립트도 <head> 안에 있음
+Line ~210-270     Audio: procedural Web Audio SFX (beep + noiseBurst 조합)
+Line ~275-330     Meta state: DEFAULT_META, loadMeta/saveMeta, metaMul()
+Line ~335-380     WEAPONS / PASSIVES 정의
+Line ~382-396     ENEMY_DEFS 정의
+Line ~400-460     Run state: state 스키마, starfield/nebula 초기화, newRunState()
+Line ~465-510     Input: keys, mouse, event handlers
+Line ~515-570     Helpers: dist/randRange/spawnFloatText/spawnSparks/spawnDebris/shake/combo
+Line ~575-630     Spawning: spawnEnemyAt/spawnAtEdge/currentSpawnMix/updateSpawner
+Line ~635-710     Weapon stats: weaponStats(key) — level별 스탯 계산
+Line ~712-770     Basic attack: fireBasicAttack() (v0.4 신규 - SPACE/click)
+Line ~772-840     Fire weapons: fireWeapon(key, stats)
+Line ~845-990     Update loop: update(dt) — 이동, 몹 AI, 발사체, 이펙트, 픽업, 레벨업
+Line ~995-1030    Damage/Kill: damageEnemy() / killEnemy()
+Line ~1035-1100   Level up: triggerLevelUp() / pickLevelUpChoices() / applyChoice()
+Line ~1105-1260   Drawing primitives: drawOrb (player), drawAsteroid, drawScout,
                   drawSatelliteEnemy, drawFighter, drawBossPlanet, drawEnemy 라우터
-Line ~1255-1350   Projectile draws: drawProjSatellite/Plasma/Missile/Drone + 라우터
-Line ~1355-1420   Icons for menu: drawIcon() — SVG-스러운 심볼
-Line ~1425-1550   Render: render() — 배경, 성운, 별밭, 픽업, 몹, 발사체, 플레이어, 이펙트, 비네트
-Line ~1555-1620   HUD/Shop/Menu/Death: updateHUD/onDeath/backToMenu/renderShop/buyUpgrade/resetAll
-Line ~1625-1680   Start/Loop/Fit: startGame() / loop() / fit()
+Line ~1265-1360   Projectile draws: drawProjSatellite/Plasma/Missile/Drone + 라우터
+Line ~1365-1430   Icons for menu: drawIcon()
+Line ~1435-1560   Render: render() — 배경, 성운, 별밭, 픽업, 몹, 발사체, 플레이어, 이펙트, 비네트
+Line ~1565-1630   HUD/Shop/Menu/Death: updateHUD/onDeath/backToMenu/renderShop/buyUpgrade
+Line ~1635-1690   Start/Loop/Fit: startGame() / loop() / fit()
 ```
 
 **주요 좌표계**: 게임 로직은 무한 월드 좌표. 렌더 시 `state.camera` 뺀 값으로 변환. `cx = -(cam.x + shake)`, `cy = -(cam.y + shake)` 후 `ctx.translate` 활용.
@@ -148,6 +149,9 @@ Line ~1625-1680   Start/Loop/Fit: startGame() / loop() / fit()
 11. **"SPACE or 좌클릭 기본 공격"** → 액티브 공격 추가 (v0.4)
 12. **"유저가 즐거워지고 많아지면 랭킹까지"** → 로컬 personal best 저장, 서버 확장 여지 남김
 13. **"어릴 때 우산 게임 (비 맞으면 돈)"** → 게임 디자인 철학 공감. "단순한 행동 → 자연스러운 보상 → 숫자 성장"이 핵심이라는 상호 이해.
+14. **"React가 아니라 HTML? Unity로 갈 예정 아니었나?"** → HTML5 Canvas가 웹게임 정답이고 Unity는 스팀 갈 때 결정. 이식 아닌 재사용 가능한 구조. (설명 완료)
+15. **"베타인데 티스토리/Vercel 어떤 방향?"** → Vercel + GA4 먼저, 개발일지는 데이터 쌓인 뒤. Velog가 개발자 유입에 유리.
+16. **"컴퓨터 회사꺼라 이식성 필요"** → 이 문서 구조 도입 (v0.7)
 
 ### 유저의 정성적 취향 (반드시 지킬 것)
 - **미니멀**: 롱카피/장식적 명명 금지. "선체 강화" X → "체력" O.
@@ -155,52 +159,25 @@ Line ~1625-1680   Start/Loop/Fit: startGame() / loop() / fit()
 - **자동화**: 조작 최소화. 무기 자동. 다만 액티브 여지는 남김(SPACE/클릭).
 - **성장 가시성**: 숫자가 커지는 즐거움. 콤보, 데미지 넘버, 크레딧 축적.
 - **확장 여지**: 나중에 랭킹/커뮤니티 붙일 수 있는 방향으로 데이터 저장.
+- **작업 흐름**: 완벽한 결과보다 반복 개선 선호. 매번 확인받지 말고 만들고 스크린샷 공유.
 
 ---
 
 ## 7. 현재 알려진 이슈 · 미비점
 
-- **아직 안 함**: 밸런스 튜닝(실제 30분 플레이 안 해봄, 몹 HP·업그레이드 코스트 미조정)
-- **아직 안 함**: 모바일 조작(터치 조이스틱)
-- **아직 안 함**: 스테이지 시스템(현재 단일 무한 웨이브)
-- **아직 안 함**: 서버 리더보드 (로컬 best만 있음)
-- **아직 안 함**: 배포(itch.io / 스팀 / 웹뷰 모바일)
 - **작은 이슈**: `triggerLevelUp` 내부 카드 렌더 코드가 지저분함 (icon wrap 이중 처리, 작동은 함). 정리해도 좋음.
 - **작은 이슈**: 마우스 aim 인디케이터 없음 (조준선/십자선 추가하면 클릭 공격 피드백 향상)
 - **작은 이슈**: 기본 공격에 관성이나 반동 이펙트 없음 (액션감 강화 여지)
+- **작은 이슈**: favicon 없음 (콘솔에 404 계속 뜸, 시각적 영향은 없음)
+- **밸런스**: 30분 정식 플레이 안 해봄. 몹 HP·업그레이드 코스트 아직 튜닝 안 됨.
+- **SEO**: `<meta description>`, OG image 등 소셜 카드 없음. 공유 시 미리보기 없음.
 
 ---
 
-## 8. 로드맵 (우선순위 순)
-
-### 즉시 (다음 세션 시작하면 이거부터 물어봐도 됨)
-1. **밸런스 튜닝 · 30분 플레이 후 조정** — 몹 HP 스케일링, 업그레이드 코스트, 무기 데미지 비례
-2. **마우스 조준 리티클 추가** — 클릭 공격 피드백
-3. **콤보 이펙트 강화** — 콤보 10/25/50 마일스톤 시 화면 이펙트
-
-### 단기 (1~3일)
-4. **모바일 대응** — 세로 화면, 터치 조이스틱, 자동 사격 (SPACE 대체)
-5. **스테이지 시스템** — 배경 팔레트 스와핑, 각 스테이지 고유 몹 세트 (성운/우주/블랙홀/성단 등)
-6. **음악 추가** — Web Audio로 짧은 앰비언트 루프 (또는 배경 사운드스케이프)
-7. **엔딩 조건** — 15분 생존 → 승리 화면 + 특별 보상
-
-### 중기 (1~2주)
-8. **에셋 업그레이드** — 파티클/이펙트 셰이더, 필요 시 스프라이트 도입 (AI 이미지 생성)
-9. **더 많은 무기/패시브** — 8~10개 무기, 조합 시너지 (뱀서의 evolution 시스템)
-10. **일일 챌린지 / 세팅 프리셋** — 유저 리텐션 훅
-
-### 장기 (수익화·성장)
-11. **배포**: itch.io + CrazyGames 퍼블리싱 신청
-12. **서버 리더보드**: 익명 닉네임 + 일간/주간 랭킹 (간단히 Supabase or Firebase)
-13. **광고 붙이기**: 웹 광고(CrazyGames), 모바일은 AdMob 웹뷰
-14. **커뮤니티 기능**: 리플레이 공유, 스크린샷 자랑 (SNS 훅)
-
----
-
-## 9. 실행 방법
+## 8. 실행 방법
 
 ### 로컬 실행
-1. 파인더에서 `/Users/hansang-yun/Documents/한상윤/project/solaris/index.html` 더블클릭
+1. 파인더에서 `index.html` 더블클릭
 2. 또는 터미널: `open "/Users/hansang-yun/Documents/한상윤/project/solaris/index.html"`
 3. 사운드가 안 나오면 브라우저 정책 → 아무 키/클릭 한 번이면 켜짐
 
@@ -211,18 +188,38 @@ python3 -m http.server 8765
 # 브라우저에서 http://localhost:8765/
 ```
 
+### 다른 컴퓨터에서 이어받을 때
+```bash
+git clone https://github.com/Yun7420/solaris.git
+cd solaris
+# CLAUDE.md 자동 로드됨. docs/AI_HANDOFF.md 읽고 이어감.
+```
+
 ### AI 세션에서 테스트하기
 - Playwright MCP 사용. `file://` 프로토콜은 차단되므로 반드시 로컬 서버 경유.
-- 예:
-  ```
-  Bash: python3 -m http.server 8765 (run_in_background: true)
-  mcp__playwright__browser_navigate: http://localhost:8765/
-  mcp__playwright__browser_click: button[onclick='startGame()']
-  mcp__playwright__browser_press_key: d (이동)
-  mcp__playwright__browser_take_screenshot: play.png
-  Read: /Users/hansang-yun/play.png
-  ```
 - 끝나면 `pkill -f "http.server 8765"`로 정리.
+
+### 배포
+- **자동**: `git push` (main 브랜치) → Vercel이 30초 안에 재배포
+- 수동 배포 불필요
+
+---
+
+## 9. 서비스 계정 정보
+
+이건 로그인 방법이지 인증 정보가 아님. 인증은 사용자님이 직접.
+
+| 서비스 | 계정 | 용도 | 접근 |
+|--------|------|------|------|
+| GitHub | Yun7420 | 소스 저장, 자동 배포 트리거 | https://github.com/Yun7420/solaris |
+| Vercel | GitHub OAuth (yun7420) | 자동 배포·호스팅 | https://vercel.com |
+| Google Analytics | (사용자님 Google 계정) | 유저 계측 | https://analytics.google.com — SOLARIS 속성 |
+
+**측정 ID**: `G-E6FJ175S19` (index.html에 하드코딩됨)
+
+**복구 코드 저장 위치** (이 맥 기준):
+- `~/Documents/한상윤/깃허브/Yun7420-github-recovery-codes.txt`
+- `~/Documents/한상윤/깃허브/vercel-recovery-codes.txt`
 
 ---
 
@@ -230,13 +227,12 @@ python3 -m http.server 8765
 
 **다음 세션에서 이 프로젝트 이어받을 때**:
 
-1. **이 파일(`PROGRESS.md`)을 먼저 읽으세요**. 사용자가 SOLARIS/solaris 프로젝트 언급하면 자동으로 열어보세요.
-2. **위치**: `/Users/hansang-yun/Documents/한상윤/project/solaris/` (2026-09-10 리네임·이동, 이전 `pest-hunter/` 경로는 사용 안 함).
-3. **사용자 취향은 §6에 시간 순으로 정리**. 반복 실수 금지.
-4. **코드 위치는 §5의 라인 지도** 참고. 정확한 라인은 파일이 바뀌면 어긋날 수 있으니 grep 확인.
-5. **작업 후 이 문서를 업데이트하세요**. §7(이슈), §8(로드맵), §11(변경 이력)에 반영.
-6. **큰 방향 전환 시(테마 변경, 프레임워크 이동 등)** 반드시 사용자에게 `AskUserQuestion`으로 확인.
-7. **사용자는 완벽하게 완성된 결과보다 반복 개선**을 선호. 매번 물어보지 말고 일단 만들고, 스크린샷/설명으로 확인 받기.
+1. **`CLAUDE.md`가 자동 로드**됩니다 (Claude Code 관례).
+2. 이 파일(`docs/AI_HANDOFF.md`)과 `docs/ROADMAP.md`를 순서대로 읽으세요.
+3. **디렉토리명은 `solaris`, 게임명도 `SOLARIS`**입니다. (이전엔 `pest-hunter`였음, 이제 잔재 없음)
+4. **큰 방향 전환**(테마, 프레임워크 이동 등)은 반드시 사용자에게 `AskUserQuestion` 확인.
+5. **작업 후** `ROADMAP.md`의 완료 항목 체크·이슈 갱신. 큰 변경은 §11에도 기록.
+6. **사용자는 완벽한 결과보다 반복 개선**을 선호. 매번 확인받지 말고 만들고 스크린샷/설명으로 확인 받기.
 
 ---
 
@@ -260,7 +256,7 @@ python3 -m http.server 8765
 - 플레이어: 이모지 → 삼각 우주선 (엔진 글로우, 조종석)
 - 3중 패럴랙스 별밭 + 성운 배경
 
-### v0.4 (2026-09-10) — 미니멀 폴리시 (현재)
+### v0.4 (2026-09-10) — 미니멀 폴리시
 - 게임명 축소: "SOLARIS · 태양계 방위대" → **SOLARIS**
 - 스토리 롱카피 제거 → 한 줄 룰
 - 강화 이름 단순화: 선체 강화/주무기 증폭/… → **체력/공격/속도/골드/자석/쿨다운/부활/장비**
@@ -268,26 +264,22 @@ python3 -m http.server 8765
 - 플레이어: 삼각 우주선 → **순수 빛의 오브** (breathing glow, 궤도 스파크, 방향 힌트 아크)
 - **기본 공격 추가** — SPACE 또는 좌클릭 → 마우스 방향 플라즈마 발사 (쿨다운 0.24s)
 - **개인 기록(Personal Best)** — 사망 시 저장, 메뉴 상단 표시, NEW BEST 배지
-- UI 텍스트 대문자·짧게: START / SOUND ON / RESET / END / MENU 등
-- 이 문서(`PROGRESS.md`) 최초 작성
 
----
-
-### v0.5 (2026-09-10) — 위치 정리 · GitHub 준비
+### v0.5 (2026-09-10) — 위치 정리 · GitHub
 - 프로젝트 위치 이동: `~/pest-hunter/` → `~/Documents/한상윤/project/solaris/`
-- 디렉토리 리네임: `pest-hunter` → `solaris` (게임명과 일치)
-- GitHub 리포 생성 + 초기 push 완료: `https://github.com/Yun7420/solaris` (Public, `main` 브랜치)
+- 디렉토리 리네임: `pest-hunter` → `solaris`
+- GitHub 리포 생성 + 초기 push: `https://github.com/Yun7420/solaris` (Public)
 - `.gitignore` + `README.md` 작성
-- 이 문서·오토메모리(`solaris_game_project.md`)의 경로 참조 모두 업데이트
 
 ### v0.6 (2026-09-10) — 라이브 배포 · 계측 시작
-- **Vercel 배포 완료**: https://solaris-lime-nine.vercel.app (Hobby 플랜, GitHub main push 시 자동 재배포)
-- **Google Analytics 4 심음** — 측정 ID `G-E6FJ175S19` (SOLARIS 속성 · 웹 스트림 `SOLARIS Web` · 대한민국·KRW · 향상된 측정 ON)
-  - 자동 계측: 페이지뷰, 스크롤, 외부 링크 클릭, 이탈 클릭, 세션 지속시간
-  - 커스텀 이벤트 아직 없음. 필요 시 `gtag('event', 'game_start', {...})` 형태로 게임 시작·사망·보스 격파·업그레이드 구매 등 추적 가능
-- GA4 리포트 접근: https://analytics.google.com → SOLARIS 속성 → 실시간/잠재고객/참여도
-- 다음 마일스톤: itch.io 배포, 밸런스 튜닝 후 CrazyGames 퍼블리싱 신청
+- **Vercel 배포 완료**: https://solaris-lime-nine.vercel.app (Hobby 플랜, 자동 재배포)
+- **Google Analytics 4 심음** — `G-E6FJ175S19` (SOLARIS 속성, 대한민국, KRW, 향상된 측정 ON)
+- 자동 계측: 페이지뷰, 스크롤, 외부 링크 클릭, 이탈 클릭, 세션 지속시간
+- GitHub About의 Website 필드에 Vercel URL 노출
 
----
-
-_마지막 업데이트: 2026-09-10 · 다음 세션은 이 문서를 먼저 읽고 이어받으세요._
+### v0.7 (2026-09-10) — 문서 이식성
+- `CLAUDE.md` 진입점 파일 추가 (Claude Code 자동 로드)
+- `docs/AI_HANDOFF.md` 생성 (이 파일, 기존 PROGRESS.md 리팩터)
+- `docs/ROADMAP.md` 생성 (완료·계획 작업 관리)
+- 루트 `PROGRESS.md` 삭제 (docs/ 하위로 이관)
+- 이유: 이 맥은 회사 컴퓨터라 다른 곳에서도 작업할 수 있어야 함. 오토메모리에 의존 X, 프로젝트 자체에 문서 내장.
