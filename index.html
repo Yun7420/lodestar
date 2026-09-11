@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SOLARIS</title>
+<title>LODESTAR</title>
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6FJ175S19"></script>
 <script>
@@ -287,7 +287,7 @@
   </div>
   <div class="hud-block" style="text-align:center; min-width: 150px;">
     <div class="val big mono" id="time">00:00</div>
-    <div class="label" style="margin-top:4px;">LV <span class="accent" id="lvl">1</span> · KILL <span class="accent" id="kills">0</span></div>
+    <div class="label" style="margin-top:4px;">LV <span class="accent" id="lvl">1</span> · MINED <span class="accent" id="kills">0</span></div>
   </div>
   <div class="hud-block" style="text-align:right;">
     <div class="label">GOLD</div>
@@ -304,9 +304,9 @@
 <!-- Start / Shop -->
 <div id="menu" class="overlay show">
   <div class="panel">
-    <h1><span class="accent">SOLARIS</span> <span class="tag">v0.4</span></h1>
+    <h1><span class="accent">LODESTAR</span> <span class="tag">v0.8</span></h1>
     <p class="sub">
-      사방에서 몰려오는 적을 격파. <b>WASD</b> 이동 · <b>SPACE / 클릭</b> 공격 · 무기 자동 발사.
+      사방에서 떠오는 우주 광석을 채굴. 돌 → 은 → 금 → 백금 → 다이아 → 미스릴. <b>WASD</b> 이동 · <b>SPACE / 클릭</b> 채굴 · 무기 자동 발사.
     </p>
 
     <div class="credits">
@@ -350,7 +350,7 @@
     <p class="sub">획득한 골드는 은행에 저장됩니다.</p>
     <div class="go-grid">
       <div class="go-cell"><div class="lbl">TIME</div><div class="val mono" id="go-time">-</div></div>
-      <div class="go-cell"><div class="lbl">KILLS</div><div class="val mono" id="go-kills">-</div></div>
+      <div class="go-cell"><div class="lbl">MINED</div><div class="val mono" id="go-kills">-</div></div>
       <div class="go-cell"><div class="lbl">GOLD</div><div class="val mono" style="color:var(--amber);" id="go-gold">-</div></div>
     </div>
     <div id="new-best" style="display:none; color: var(--cyan); font-weight:800; letter-spacing:3px; margin-top:8px; font-size:12px;">▲ NEW BEST</div>
@@ -362,7 +362,7 @@
 
 <script>
 // ============================================================
-// SOLARIS · 태양계 방위대 — v0.3 quality pass
+// LODESTAR — v0.8 cosmic mining
 // All entities are drawn via canvas paths (no emojis in-world)
 // ============================================================
 
@@ -456,7 +456,7 @@ const SHOP_ITEMS = [
 ];
 function loadMeta() {
   try {
-    const raw = localStorage.getItem('solaris_meta_v1');
+    const raw = localStorage.getItem('lodestar_meta_v1');
     if (!raw) return structuredClone(DEFAULT_META);
     const m = JSON.parse(raw);
     for (const k of Object.keys(DEFAULT_META.upgrades)) if (m.upgrades[k] === undefined) m.upgrades[k] = 0;
@@ -464,7 +464,7 @@ function loadMeta() {
     return m;
   } catch { return structuredClone(DEFAULT_META); }
 }
-function saveMeta() { localStorage.setItem('solaris_meta_v1', JSON.stringify(META)); }
+function saveMeta() { localStorage.setItem('lodestar_meta_v1', JSON.stringify(META)); }
 let META = loadMeta();
 function metaMul(id) {
   const lv = META.upgrades[id] || 0;
@@ -509,13 +509,14 @@ const PASSIVES = {
 // ============================================================
 // ENEMY DEFS
 // ============================================================
+// 광석 티어: 낮은 티어일수록 흔하고 약함, 높은 티어일수록 희귀하고 튼튼·가치 높음
 const ENEMY_DEFS = {
-  chunk:    { drawKey: 'chunk',    size: 16, hp: 8,   speed: 70,  dmg: 5,  gold: 1, xp: 1, tint: '#8a7a6a' },
-  asteroid: { drawKey: 'asteroid', size: 26, hp: 20,  speed: 55,  dmg: 10, gold: 2, xp: 2, tint: '#6a6a7a' },
-  scout:    { drawKey: 'scout',    size: 20, hp: 12,  speed: 110, dmg: 8,  gold: 2, xp: 2, tint: '#ff4a5a' },
-  satellite:{ drawKey: 'satellite',size: 24, hp: 30,  speed: 60,  dmg: 12, gold: 3, xp: 3, tint: '#a0a8c0' },
-  fighter:  { drawKey: 'fighter',  size: 24, hp: 60,  speed: 85,  dmg: 15, gold: 5, xp: 5, tint: '#4ade80' },
-  boss:     { drawKey: 'planet',   size: 68, hp: 800, speed: 45,  dmg: 30, gold: 100, xp: 50, tint: '#f88a5a', isBoss: true },
+  pebble:   { drawKey: 'pebble',   size: 16, hp: 8,   speed: 70,  dmg: 5,  gold: 1,   xp: 1,  tint: '#8a6a4a' },
+  silver:   { drawKey: 'silver',   size: 22, hp: 20,  speed: 60,  dmg: 8,  gold: 3,   xp: 2,  tint: '#c8d0d8' },
+  gold:     { drawKey: 'gold',     size: 24, hp: 36,  speed: 55,  dmg: 12, gold: 8,   xp: 3,  tint: '#f0c458' },
+  platinum: { drawKey: 'platinum', size: 26, hp: 60,  speed: 75,  dmg: 14, gold: 16,  xp: 4,  tint: '#b8dcf0' },
+  diamond:  { drawKey: 'diamond',  size: 28, hp: 90,  speed: 85,  dmg: 18, gold: 28,  xp: 6,  tint: '#d0f0ff' },
+  mithril:  { drawKey: 'mithril',  size: 68, hp: 800, speed: 45,  dmg: 30, gold: 200, xp: 50, tint: '#64f0d0', isBoss: true },
 };
 
 // ============================================================
@@ -709,14 +710,14 @@ function spawnAtEdge(type) {
 }
 function currentSpawnMix() {
   const t = state.time; const mix = [];
-  if (t < 60)   mix.push('chunk','chunk','chunk','asteroid');
-  if (t >= 30)  mix.push('scout');
-  if (t >= 90)  mix.push('asteroid','asteroid','scout');
-  if (t >= 150) mix.push('satellite','satellite');
-  if (t >= 210) mix.push('fighter');
-  if (t >= 300) mix.push('satellite','fighter','fighter');
-  if (t >= 420) mix.push('fighter','fighter','satellite');
-  return mix.length ? mix : ['chunk'];
+  if (t < 60)   mix.push('pebble','pebble','pebble','silver');
+  if (t >= 30)  mix.push('silver');
+  if (t >= 90)  mix.push('silver','silver','gold');
+  if (t >= 150) mix.push('gold','gold');
+  if (t >= 210) mix.push('platinum');
+  if (t >= 300) mix.push('platinum','diamond','diamond');
+  if (t >= 420) mix.push('diamond','diamond','platinum');
+  return mix.length ? mix : ['pebble'];
 }
 function updateSpawner(dt) {
   state.spawnAcc += dt;
@@ -730,7 +731,7 @@ function updateSpawner(dt) {
   if (minute >= 1 && !state.bossSpawnedFor[minute]) {
     state.bossSpawnedFor[minute] = true;
     spawnAtEdge('boss');
-    spawnFloatText(state.player.x, state.player.y - 40, '▲ BOSS', '#ff4a6a', 22);
+    spawnFloatText(state.player.x, state.player.y - 40, '▲ MITHRIL CORE', '#64f0d0', 22);
     shake(8); SFX.boss();
   }
 }
@@ -1107,7 +1108,7 @@ function killEnemy(e) {
   if (e.def.isBoss) {
     for (let i = 0; i < 14; i++) state.coins.push({ x: e.x + randRange(-40, 40), y: e.y + randRange(-40, 40), value: 8 });
     shake(10); slowMo = 0.4;
-    spawnFloatText(e.x, e.y - 40, 'BOSS DOWN', '#4de1ff', 22);
+    spawnFloatText(e.x, e.y - 40, 'CORE MINED', '#64f0d0', 22);
   }
   state.enemies = state.enemies.filter(x => !x.dead);
 }
@@ -1240,166 +1241,214 @@ function seededOffset(seed, i) {
   return x;
 }
 
-function drawAsteroid(ctx, x, y, size, seed, rot, small = false) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(rot);
+// ---- Ore drawing helpers ----
+// 공통 암반 몸체 (다각형 + 크레이터). tint는 { light, dark } 두 색 그라디언트.
+function drawRockyBody(ctx, size, seed, tint, craters = true) {
   const sides = 9;
-  const baseColor = small ? '#5a4a3a' : '#4a4550';
-  const strokeColor = small ? '#7a6858' : '#6a6478';
   const grd = ctx.createRadialGradient(-size * 0.2, -size * 0.2, 0, 0, 0, size);
-  grd.addColorStop(0, small ? '#7a6858' : '#7a7488');
-  grd.addColorStop(1, small ? '#2a1e14' : '#20202e');
+  grd.addColorStop(0, tint.light);
+  grd.addColorStop(1, tint.dark);
   ctx.fillStyle = grd;
-  ctx.strokeStyle = strokeColor;
+  ctx.strokeStyle = tint.stroke || tint.light;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let i = 0; i < sides; i++) {
     const a = (i / sides) * Math.PI * 2;
-    const r = size * (0.75 + seededOffset(seed, i) * 0.35);
+    const r = size * (0.78 + seededOffset(seed, i) * 0.28);
     const px = Math.cos(a) * r, py = Math.sin(a) * r;
     if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
   }
   ctx.closePath();
   ctx.fill(); ctx.stroke();
-  // craters
-  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-  ctx.beginPath(); ctx.arc(-size * 0.2, -size * 0.15, size * 0.18, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(size * 0.2, size * 0.1, size * 0.12, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(size * 0.05, -size * 0.3, size * 0.08, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
-}
-function drawScout(ctx, x, y, size, t) {
-  ctx.save();
-  ctx.translate(x, y);
-  // hex body
-  ctx.fillStyle = '#161b2a';
-  ctx.strokeStyle = '#5a6aa0';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
-    const r = size * 0.55;
-    if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
-    else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+  if (craters) {
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.beginPath(); ctx.arc(-size * 0.22, -size * 0.14, size * 0.16, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(size * 0.2, size * 0.12, size * 0.11, 0, Math.PI * 2); ctx.fill();
   }
-  ctx.closePath(); ctx.fill(); ctx.stroke();
-  // pulsing red eye
-  const pulse = 0.6 + Math.sin(t * 6 + x * 0.01) * 0.4;
-  const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.55);
-  glow.addColorStop(0, `rgba(255, 74, 90, ${pulse * 0.8})`);
-  glow.addColorStop(1, 'rgba(255, 74, 90, 0)');
-  ctx.fillStyle = glow;
-  ctx.beginPath(); ctx.arc(0, 0, size * 0.55, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = `rgba(255, 90, 100, ${pulse})`;
-  ctx.beginPath(); ctx.arc(0, 0, size * 0.16, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
 }
-function drawSatelliteEnemy(ctx, x, y, size, t) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(Math.sin(t * 0.5 + x * 0.01) * 0.15);
-  const s = size;
-  // solar panels
-  ctx.fillStyle = '#0f2450';
-  ctx.strokeStyle = '#3a6cb0';
-  ctx.lineWidth = 1;
-  ctx.fillRect(-s * 0.55, -s * 0.15, s * 0.32, s * 0.3);
-  ctx.strokeRect(-s * 0.55, -s * 0.15, s * 0.32, s * 0.3);
-  ctx.fillRect(s * 0.23, -s * 0.15, s * 0.32, s * 0.3);
-  ctx.strokeRect(s * 0.23, -s * 0.15, s * 0.32, s * 0.3);
-  for (let i = 1; i < 4; i++) {
-    const xo = -s * 0.55 + i * s * 0.08;
-    ctx.beginPath(); ctx.moveTo(xo, -s * 0.15); ctx.lineTo(xo, s * 0.15); ctx.stroke();
-    const xo2 = s * 0.23 + i * s * 0.08;
-    ctx.beginPath(); ctx.moveTo(xo2, -s * 0.15); ctx.lineTo(xo2, s * 0.15); ctx.stroke();
+
+// 광석 결정 embed. tier는 크리스털 색·크기·개수를 결정. seed로 위치 배치.
+function drawCrystals(ctx, size, seed, colors, count, sizeMul = 1) {
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 + seededOffset(seed, i + 17) * 1.4;
+    const dist = size * (0.18 + seededOffset(seed, i + 23) * 0.18);
+    const cx = Math.cos(angle) * dist;
+    const cy = Math.sin(angle) * dist;
+    const cs = size * (0.16 + seededOffset(seed, i + 31) * 0.08) * sizeMul;
+    // 결정 몸통 (다이아 폴리곤)
+    ctx.fillStyle = colors.face;
+    ctx.strokeStyle = colors.edge;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - cs);
+    ctx.lineTo(cx + cs * 0.65, cy);
+    ctx.lineTo(cx, cy + cs);
+    ctx.lineTo(cx - cs * 0.65, cy);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // 하이라이트 (왼쪽 위 상단면)
+    ctx.fillStyle = colors.highlight;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - cs);
+    ctx.lineTo(cx + cs * 0.28, cy - cs * 0.3);
+    ctx.lineTo(cx, cy + cs * 0.15);
+    ctx.lineTo(cx - cs * 0.28, cy - cs * 0.3);
+    ctx.closePath();
+    ctx.fill();
   }
-  // core
-  ctx.fillStyle = '#3a4258';
-  ctx.strokeStyle = '#8a92aa';
-  ctx.fillRect(-s * 0.18, -s * 0.32, s * 0.36, s * 0.64);
-  ctx.strokeRect(-s * 0.18, -s * 0.32, s * 0.36, s * 0.64);
-  // antenna
-  ctx.beginPath(); ctx.moveTo(0, -s * 0.32); ctx.lineTo(0, -s * 0.5); ctx.stroke();
-  const blink = Math.sin(t * 8 + x * 0.01) > 0;
-  ctx.fillStyle = blink ? '#ff4a6a' : '#3a1520';
-  ctx.beginPath(); ctx.arc(0, -s * 0.5, 2, 0, Math.PI * 2); ctx.fill();
+}
+
+// Tier 1: 돌 (결정 없음, 갈색 톤)
+function drawPebble(ctx, x, y, size, seed, rot) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  drawRockyBody(ctx, size, seed, {
+    light: '#7a6248', dark: '#2a1e12', stroke: '#5a4632',
+  }, true);
   ctx.restore();
 }
-function drawFighter(ctx, x, y, size, angle) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(angle + Math.PI / 2);
-  const s = size;
-  // main dart
-  const grd = ctx.createLinearGradient(0, -s * 0.5, 0, s * 0.5);
-  grd.addColorStop(0, '#4ade80');
-  grd.addColorStop(0.4, '#1a5a3a');
-  grd.addColorStop(1, '#0a2418');
-  ctx.fillStyle = grd;
-  ctx.strokeStyle = '#7cff9c';
-  ctx.lineWidth = 1.4;
+
+// Tier 2: 은 원석
+function drawSilverOre(ctx, x, y, size, seed, rot) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  drawRockyBody(ctx, size, seed, {
+    light: '#6a6e78', dark: '#20242c', stroke: '#4a4e58',
+  }, true);
+  drawCrystals(ctx, size, seed, {
+    face: '#d8dce4', edge: '#8a92a0', highlight: '#f8fafc',
+  }, 3);
+  ctx.restore();
+}
+
+// Tier 3: 금 원석
+function drawGoldOre(ctx, x, y, size, seed, rot) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  drawRockyBody(ctx, size, seed, {
+    light: '#5a5040', dark: '#1e1810', stroke: '#3a3020',
+  }, true);
+  drawCrystals(ctx, size, seed, {
+    face: '#f0c458', edge: '#8a5a1a', highlight: '#ffe8a0',
+  }, 3, 1.1);
+  ctx.restore();
+}
+
+// Tier 4: 백금 원석
+function drawPlatinumOre(ctx, x, y, size, seed, rot) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  drawRockyBody(ctx, size, seed, {
+    light: '#4a5060', dark: '#181c26', stroke: '#2a3040',
+  }, true);
+  drawCrystals(ctx, size, seed, {
+    face: '#b8dcf0', edge: '#4a7ab0', highlight: '#e0f4ff',
+  }, 4, 1.1);
+  ctx.restore();
+}
+
+// Tier 5: 다이아 원석 (반짝 애니메이션)
+function drawDiamondOre(ctx, x, y, size, seed, rot, t) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  drawRockyBody(ctx, size, seed, {
+    light: '#3a4058', dark: '#12141c', stroke: '#2a3040',
+  }, true);
+  // 중앙 큰 다이아 결정
+  const pulse = 0.85 + Math.sin(t * 4 + seed) * 0.15;
+  const cs = size * 0.34 * pulse;
+  ctx.fillStyle = '#d8f4ff';
+  ctx.strokeStyle = '#7ac0e8';
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.moveTo(0, -s * 0.55);
-  ctx.lineTo(s * 0.38, s * 0.35);
-  ctx.lineTo(0, s * 0.15);
-  ctx.lineTo(-s * 0.38, s * 0.35);
+  ctx.moveTo(0, -cs);
+  ctx.lineTo(cs * 0.7, 0);
+  ctx.lineTo(0, cs);
+  ctx.lineTo(-cs * 0.7, 0);
   ctx.closePath();
   ctx.fill(); ctx.stroke();
-  // glow spot
-  ctx.fillStyle = '#4ade80';
-  ctx.shadowColor = '#4ade80'; ctx.shadowBlur = 6;
-  ctx.beginPath(); ctx.arc(0, -s * 0.1, s * 0.09, 0, Math.PI * 2); ctx.fill();
-  ctx.shadowBlur = 0;
+  // 하이라이트
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.beginPath();
+  ctx.moveTo(0, -cs);
+  ctx.lineTo(cs * 0.3, -cs * 0.3);
+  ctx.lineTo(0, cs * 0.2);
+  ctx.lineTo(-cs * 0.3, -cs * 0.3);
+  ctx.closePath();
+  ctx.fill();
+  // 주변 작은 결정 2개
+  drawCrystals(ctx, size, seed + 100, {
+    face: '#d0f0ff', edge: '#4a80b0', highlight: '#f8ffff',
+  }, 2, 0.7);
+  // 스파클
+  const spark = (Math.sin(t * 8 + seed * 0.5) + 1) * 0.5;
+  ctx.fillStyle = `rgba(255,255,255,${spark})`;
+  ctx.beginPath(); ctx.arc(cs * 0.2, -cs * 0.3, 1.5, 0, Math.PI * 2); ctx.fill();
   ctx.restore();
 }
-function drawBossPlanet(ctx, x, y, size, t) {
-  ctx.save();
-  ctx.translate(x, y);
+
+// Boss: 미스릴 코어 (거대 발광 결정 클러스터)
+function drawMithrilCore(ctx, x, y, size, t) {
+  ctx.save(); ctx.translate(x, y);
   const s = size;
-  // atmosphere
-  const atm = ctx.createRadialGradient(0, 0, s * 0.35, 0, 0, s * 0.7);
-  atm.addColorStop(0, 'rgba(255, 120, 80, 0.4)');
-  atm.addColorStop(1, 'rgba(255, 120, 80, 0)');
-  ctx.fillStyle = atm;
-  ctx.beginPath(); ctx.arc(0, 0, s * 0.7, 0, Math.PI * 2); ctx.fill();
-  // body
-  const bd = ctx.createRadialGradient(-s * 0.18, -s * 0.18, 0, 0, 0, s * 0.5);
-  bd.addColorStop(0, '#ffb078');
-  bd.addColorStop(0.6, '#a04630');
-  bd.addColorStop(1, '#3a1418');
-  ctx.fillStyle = bd;
-  ctx.beginPath(); ctx.arc(0, 0, s * 0.5, 0, Math.PI * 2); ctx.fill();
-  // storm bands
-  ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+  // 외곽 발광
+  const glow = ctx.createRadialGradient(0, 0, s * 0.4, 0, 0, s * 0.75);
+  glow.addColorStop(0, 'rgba(100, 240, 208, 0.5)');
+  glow.addColorStop(1, 'rgba(100, 240, 208, 0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath(); ctx.arc(0, 0, s * 0.75, 0, Math.PI * 2); ctx.fill();
+  // 몸체 (거대 결정 클러스터 - 중앙 결정 + 주변 6개)
+  ctx.rotate(t * 0.1);
+  // 주변 6개 결정
+  ctx.fillStyle = '#3a8a78';
+  ctx.strokeStyle = '#a0f0dc';
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const cs = s * (0.28 + Math.sin(t * 2 + i) * 0.03);
+    const dist = s * 0.32;
+    const cx = Math.cos(a) * dist;
+    const cy = Math.sin(a) * dist;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a) * cs, cy + Math.sin(a) * cs);
+    ctx.lineTo(cx + Math.cos(a + Math.PI * 0.35) * cs * 0.5, cy + Math.sin(a + Math.PI * 0.35) * cs * 0.5);
+    ctx.lineTo(cx - Math.cos(a) * cs * 0.7, cy - Math.sin(a) * cs * 0.7);
+    ctx.lineTo(cx + Math.cos(a - Math.PI * 0.35) * cs * 0.5, cy + Math.sin(a - Math.PI * 0.35) * cs * 0.5);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+  }
+  // 중앙 큰 결정 (다이아 형태)
+  const pulse = 0.9 + Math.sin(t * 3) * 0.1;
+  const cs = s * 0.4 * pulse;
+  const grd = ctx.createRadialGradient(0, 0, 0, 0, 0, cs);
+  grd.addColorStop(0, '#e8fffa');
+  grd.addColorStop(0.6, '#64f0d0');
+  grd.addColorStop(1, '#1a6858');
+  ctx.fillStyle = grd;
+  ctx.strokeStyle = '#c8fff0';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.ellipse(Math.sin(t) * s * 0.08, -s * 0.18, s * 0.45, s * 0.06, 0, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.moveTo(0, -cs);
+  ctx.lineTo(cs * 0.7, 0);
+  ctx.lineTo(0, cs);
+  ctx.lineTo(-cs * 0.7, 0);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // 하이라이트
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
   ctx.beginPath();
-  ctx.ellipse(Math.sin(t + 1) * s * 0.06, s * 0.12, s * 0.48, s * 0.05, 0, 0, Math.PI * 2);
-  ctx.stroke();
-  // ring
-  ctx.strokeStyle = 'rgba(255, 200, 150, 0.55)';
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, s * 0.75, s * 0.16, 0.3, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.strokeStyle = 'rgba(255, 220, 190, 0.3)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, s * 0.82, s * 0.18, 0.3, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.moveTo(0, -cs);
+  ctx.lineTo(cs * 0.35, -cs * 0.4);
+  ctx.lineTo(0, cs * 0.15);
+  ctx.lineTo(-cs * 0.35, -cs * 0.4);
+  ctx.closePath();
+  ctx.fill();
   ctx.restore();
 }
+
 function drawEnemy(ctx, e, t) {
   const k = e.def.drawKey;
-  if (k === 'chunk')     drawAsteroid(ctx, e.x, e.y, e.size / 2, e.seed, e.rot, true);
-  else if (k === 'asteroid') drawAsteroid(ctx, e.x, e.y, e.size / 2, e.seed, e.rot, false);
-  else if (k === 'scout')    drawScout(ctx, e.x, e.y, e.size, t);
-  else if (k === 'satellite')drawSatelliteEnemy(ctx, e.x, e.y, e.size, t);
-  else if (k === 'fighter')  drawFighter(ctx, e.x, e.y, e.size, e.facing);
-  else if (k === 'planet')   drawBossPlanet(ctx, e.x, e.y, e.size, t);
+  if      (k === 'pebble')   drawPebble(ctx, e.x, e.y, e.size / 2, e.seed, e.rot);
+  else if (k === 'silver')   drawSilverOre(ctx, e.x, e.y, e.size / 2, e.seed, e.rot);
+  else if (k === 'gold')     drawGoldOre(ctx, e.x, e.y, e.size / 2, e.seed, e.rot);
+  else if (k === 'platinum') drawPlatinumOre(ctx, e.x, e.y, e.size / 2, e.seed, e.rot);
+  else if (k === 'diamond')  drawDiamondOre(ctx, e.x, e.y, e.size / 2, e.seed, e.rot, t);
+  else if (k === 'mithril')  drawMithrilCore(ctx, e.x, e.y, e.size, t);
 }
 
 // ---- Projectile draws ----

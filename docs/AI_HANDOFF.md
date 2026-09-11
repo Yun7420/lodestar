@@ -1,4 +1,4 @@
-# SOLARIS · AI 인계 문서
+# LODESTAR · AI 인계 문서
 
 > 이 문서는 **다음 AI 세션이 이 프로젝트를 이어받아 작업할 수 있도록** 만든 인계 문서입니다.
 > 진입점은 프로젝트 루트의 `CLAUDE.md`. 이 문서는 그 다음으로 읽는 상세본입니다.
@@ -8,13 +8,13 @@
 
 ## 1. 한 줄 요약
 
-브라우저에서 바로 돌아가는 **Vampire Survivors 스타일 뱀서라이크** 게임. 사용자는 우주 컨셉·미니멀 톤·자동 발사 + 액티브 공격을 원함. 단일 HTML 파일, 빌드/의존성 없음.
+브라우저에서 바로 돌아가는 **우주 광부 컨셉 뱀서라이크** 게임. 몰려오는 광석(돌→은→금→백금→다이아→미스릴 코어)을 자동 무기로 채굴, 크레딧으로 영구 강화. 미니멀·세련 톤, 단일 HTML 파일, 빌드/의존성 없음.
 
-- **게임명**: SOLARIS
-- **현재 버전**: v0.6
-- **Live**: https://solaris-lime-nine.vercel.app
-- **Repo**: https://github.com/Yun7420/solaris
-- **GA4**: `G-E6FJ175S19`
+- **게임명**: LODESTAR
+- **현재 버전**: v0.8
+- **Live**: Vercel 리네임 대기 (구 URL `https://solaris-lime-nine.vercel.app` — 사용자가 Vercel 대시보드에서 `lodestar`로 리네임하면 새 URL 발급)
+- **Repo**: https://github.com/Yun7420/lodestar (2026-09-11 리네임, 옛 solaris URL은 GitHub이 자동 리다이렉트)
+- **GA4**: `G-E6FJ175S19` (속성명은 GA4 UI에서 `LODESTAR`로 리네임 필요, 측정 ID와 데이터는 유지)
 
 ---
 
@@ -32,18 +32,18 @@
 ## 3. 프로젝트 컨셉 (현재 확정)
 
 ### 게임 제목
-**SOLARIS** (한 단어, 이전에 "태양계 방위대" 붙였다가 사용자가 촌스럽다고 잘라냄)
+**LODESTAR** (한 단어). "lode" = 광맥, "star" = 별. 두 뜻 이중 은유. 이전 이름 `pest-hunter` → `SOLARIS` → **`LODESTAR`**. 컨셉 전환 때마다 리네임.
 
 ### 장르
-Vampire Survivors-like (bullet heaven) — **뇌빼고 하는 도파민 게임**
+Vampire Survivors-like (bullet heaven) + **우주 광부 서사** — 뇌빼고 하는 도파민 게임. 이동만 하면 자동 무기가 광석을 채굴, 크레딧 축적.
 
 ### 핵심 루프
 ```
-이동 → 자동 무기 발사 → 몹 처치 → XP/골드 획득 → 레벨업(무기 강화) → 반복
+이동 → 자동 무기가 광석 채굴 → 크레딧·XP 획득 → 레벨업(무기 강화) → 반복
         ↓
      사망 시
         ↓
-사령부 금고에 골드 저장 → 영구 강화 구매 → 다음 판에서 더 강해짐
+금고에 크레딧 저장 → 영구 강화 구매 → 다음 판에서 더 강해짐
 ```
 
 ### 미학
@@ -78,17 +78,31 @@ Vampire Survivors-like (bullet heaven) — **뇌빼고 하는 도파민 게임**
 ### 패시브 (6종, 각 5레벨) - `PASSIVES` 객체
 부스트(속도) / 실드(HP+15) / 자석(픽업+25%) / 럭(골드+15%) / 파워(공격+10%) / 헤이스트(쿨다운-8%)
 
-### 몹 (6종) - `ENEMY_DEFS` 객체
-`chunk` (소행성조각) / `asteroid` (소행성) / `scout` (정찰드론, 붉은 눈 펄스) / `satellite` (반란위성, 태양전지판) / `fighter` (외계 전투기, 다트형) / `boss` (반란 행성, 대기광·링)
+### 광석 티어 (6단계) - `ENEMY_DEFS` 객체
+낮은 티어는 흔하고 약함, 높은 티어는 희귀하고 튼튼·가치 높음. 모두 플레이어에게 접근하며 부딪히면 데미지(뱀서라이크 유지).
 
-**모든 몹은 캔버스 벡터로 직접 그림** — 이모지 사용 금지. `drawEnemy()` → 타입별 draw 함수 라우팅.
+| key | 이름 | 크기 | HP | 속도 | 데미지 | 크레딧 | XP | 색상 |
+|-----|------|-----|-----|------|-------|-------|-----|------|
+| `pebble`   | 돌         | 16 | 8   | 70  | 5  | 1   | 1  | 갈색 |
+| `silver`   | 은 원석    | 22 | 20  | 60  | 8  | 3   | 2  | 실버 |
+| `gold`     | 금 원석    | 24 | 36  | 55  | 12 | 8   | 3  | 딥골드 |
+| `platinum` | 백금 원석  | 26 | 60  | 75  | 14 | 16  | 4  | 푸른흰 |
+| `diamond`  | 다이아 원석 | 28 | 90  | 85  | 18 | 28  | 6  | 청백 |
+| `mithril`  | 미스릴 코어(보스) | 68 | 800 | 45 | 30 | 200 | 50 | 발광 청록 |
+
+**모든 광석은 캔버스 벡터로 직접 그림** — 이모지 사용 금지. `drawEnemy()` → 타입별 draw 함수 라우팅.
+- `drawPebble`: 갈색 다각형 (결정 없음)
+- `drawSilverOre` / `drawGoldOre` / `drawPlatinumOre`: 회색 암반 + `drawCrystals` 헬퍼(3~4개 결정)
+- `drawDiamondOre`: 중앙 큰 결정 + 스파클 애니메이션
+- `drawMithrilCore`: 발광 결정 클러스터 (중앙 큰 결정 + 6개 주변)
 
 ### 스폰
-- 첫 60초: chunk/asteroid만
-- 30s부터 scout, 90s부터 asteroid 증가, 150s satellite, 210s fighter…
+- 첫 60초: `pebble` 위주 + `silver` 소량
+- 30s부터 `silver` 증가, 90s부터 `gold` 등장, 150s `gold` 안정, 210s `platinum`, 300s+ `diamond`
 - HP 스케일링: `1 + time/90`
 - 스폰 속도: `1.2 + time/25` 마리/초
-- **3분(180s)마다 보스** 출현 → "▲ BOSS" 텍스트 + 화면 흔들림
+- **3분(180s)마다 미스릴 코어 등장** → "▲ MITHRIL CORE" 텍스트 + 화면 흔들림
+- 처치 시 "CORE MINED" + 크레딧 폭포 + 슬로우모
 
 ### 영구 강화 (SHOP_ITEMS)
 체력(+20HP) / 공격(+5%DMG) / 속도(+3%SPD) / 골드(+10%) / 자석(+25%픽업) / 쿨다운(-3%) / 부활(+1) / 장비(+1 시작 무기)
@@ -119,8 +133,9 @@ Line ~772-840     Fire weapons: fireWeapon(key, stats)
 Line ~845-990     Update loop: update(dt) — 이동, 몹 AI, 발사체, 이펙트, 픽업, 레벨업
 Line ~995-1030    Damage/Kill: damageEnemy() / killEnemy()
 Line ~1035-1100   Level up: triggerLevelUp() / pickLevelUpChoices() / applyChoice()
-Line ~1105-1260   Drawing primitives: drawOrb (player), drawAsteroid, drawScout,
-                  drawSatelliteEnemy, drawFighter, drawBossPlanet, drawEnemy 라우터
+Line ~1105-1260   Drawing primitives: drawOrb (player), drawRockyBody+drawCrystals 헬퍼,
+                  drawPebble/drawSilverOre/drawGoldOre/drawPlatinumOre/drawDiamondOre/drawMithrilCore,
+                  drawEnemy 라우터
 Line ~1265-1360   Projectile draws: drawProjSatellite/Plasma/Missile/Drone + 라우터
 Line ~1365-1430   Icons for menu: drawIcon()
 Line ~1435-1560   Render: render() — 배경, 성운, 별밭, 픽업, 몹, 발사체, 플레이어, 이펙트, 비네트
@@ -152,6 +167,9 @@ Line ~1635-1690   Start/Loop/Fit: startGame() / loop() / fit()
 14. **"React가 아니라 HTML? Unity로 갈 예정 아니었나?"** → HTML5 Canvas가 웹게임 정답이고 Unity는 스팀 갈 때 결정. 이식 아닌 재사용 가능한 구조. (설명 완료)
 15. **"베타인데 티스토리/Vercel 어떤 방향?"** → Vercel + GA4 먼저, 개발일지는 데이터 쌓인 뒤. Velog가 개발자 유입에 유리.
 16. **"컴퓨터 회사꺼라 이식성 필요"** → 이 문서 구조 도입 (v0.7)
+17. **"우주 광석 채굴 컨셉으로 (돌→은→금)"** → 방향성 자체 전환. 뱀서 코어(공격/방어) 유지하고 몹만 광석 티어로 재정의 결정. (v0.8)
+18. **"우주 광석 채굴은 너무 없어보이고 / 다른 게임과 겹치지 않을 독특한 이름"** → 조어·희소단어 위주로 LODESTAR 채택 (실제 영단어 lode+star, 게임명 거의 안 쓰임). (v0.8)
+19. **"인프라도 다 리네임"** → GitHub 리포·Vercel·GA4·로컬 폴더·localStorage 키까지 SOLARIS→LODESTAR 통일. (v0.8)
 
 ### 유저의 정성적 취향 (반드시 지킬 것)
 - **미니멀**: 롱카피/장식적 명명 금지. "선체 강화" X → "체력" O.
@@ -178,20 +196,20 @@ Line ~1635-1690   Start/Loop/Fit: startGame() / loop() / fit()
 
 ### 로컬 실행
 1. 파인더에서 `index.html` 더블클릭
-2. 또는 터미널: `open "/Users/hansang-yun/Documents/한상윤/project/solaris/index.html"`
+2. 또는 터미널: `open "/Users/hansang-yun/Documents/한상윤/project/lodestar/index.html"`
 3. 사운드가 안 나오면 브라우저 정책 → 아무 키/클릭 한 번이면 켜짐
 
 ### 로컬 서버로 실행 (Playwright 테스트용)
 ```bash
-cd "/Users/hansang-yun/Documents/한상윤/project/solaris"
+cd "/Users/hansang-yun/Documents/한상윤/project/lodestar"
 python3 -m http.server 8765
 # 브라우저에서 http://localhost:8765/
 ```
 
 ### 다른 컴퓨터에서 이어받을 때
 ```bash
-git clone https://github.com/Yun7420/solaris.git
-cd solaris
+git clone https://github.com/Yun7420/lodestar.git
+cd lodestar
 # CLAUDE.md 자동 로드됨. docs/AI_HANDOFF.md 읽고 이어감.
 ```
 
@@ -211,11 +229,11 @@ cd solaris
 
 | 서비스 | 계정 | 용도 | 접근 |
 |--------|------|------|------|
-| GitHub | Yun7420 | 소스 저장, 자동 배포 트리거 | https://github.com/Yun7420/solaris |
-| Vercel | GitHub OAuth (yun7420) | 자동 배포·호스팅 | https://vercel.com |
-| Google Analytics | (사용자님 Google 계정) | 유저 계측 | https://analytics.google.com — SOLARIS 속성 |
+| GitHub | Yun7420 | 소스 저장, 자동 배포 트리거 | https://github.com/Yun7420/lodestar |
+| Vercel | GitHub OAuth (yun7420) | 자동 배포·호스팅 | https://vercel.com (프로젝트명 리네임 대기) |
+| Google Analytics | (사용자님 Google 계정) | 유저 계측 | https://analytics.google.com — 속성명 리네임 대기 |
 
-**측정 ID**: `G-E6FJ175S19` (index.html에 하드코딩됨)
+**측정 ID**: `G-E6FJ175S19` (index.html에 하드코딩됨, 리브랜드 후에도 유지)
 
 **복구 코드 저장 위치** (이 맥 기준):
 - `~/Documents/한상윤/깃허브/Yun7420-github-recovery-codes.txt`
@@ -229,7 +247,7 @@ cd solaris
 
 1. **`CLAUDE.md`가 자동 로드**됩니다 (Claude Code 관례).
 2. 이 파일(`docs/AI_HANDOFF.md`)과 `docs/ROADMAP.md`를 순서대로 읽으세요.
-3. **디렉토리명은 `solaris`, 게임명도 `SOLARIS`**입니다. (이전엔 `pest-hunter`였음, 이제 잔재 없음)
+3. **디렉토리명은 `lodestar`, 게임명도 `LODESTAR`**입니다. (`pest-hunter` → `solaris` → `lodestar` 순으로 리네임 됨, 이제 잔재 없음)
 4. **큰 방향 전환**(테마, 프레임워크 이동 등)은 반드시 사용자에게 `AskUserQuestion` 확인.
 5. **작업 후** `ROADMAP.md`의 완료 항목 체크·이슈 갱신. 큰 변경은 §11에도 기록.
 6. **사용자는 완벽한 결과보다 반복 개선**을 선호. 매번 확인받지 말고 만들고 스크린샷/설명으로 확인 받기.
@@ -283,3 +301,27 @@ cd solaris
 - `docs/ROADMAP.md` 생성 (완료·계획 작업 관리)
 - 루트 `PROGRESS.md` 삭제 (docs/ 하위로 이관)
 - 이유: 이 맥은 회사 컴퓨터라 다른 곳에서도 작업할 수 있어야 함. 오토메모리에 의존 X, 프로젝트 자체에 문서 내장.
+
+### v0.8 (2026-09-11) — 채굴 리브랜드 (SOLARIS → LODESTAR)
+- **컨셉 전환**: 우주 방위대 → **우주 광부**. 몹이 반란군에서 광석으로 재정의.
+- **몹 6종 완전 재작성**:
+  - 코드명: `chunk/asteroid/scout/satellite/fighter/boss` → `pebble/silver/gold/platinum/diamond/mithril`
+  - 시각적: 기계·행성 → **암반 다각형 + 티어별 결정 embed** (drawRockyBody + drawCrystals 헬퍼)
+  - 미스릴 코어는 발광 결정 클러스터로 재작성 (`drawMithrilCore`)
+- **인프라 전면 리네임** (SOLARIS → LODESTAR):
+  - GitHub 리포: `Yun7420/solaris` → `Yun7420/lodestar` (`gh repo rename`, 옛 URL 자동 리다이렉트)
+  - 로컬 폴더: `project/solaris/` → `project/lodestar/`
+  - git remote URL 업데이트
+  - localStorage 키: `solaris_meta_v1` → `lodestar_meta_v1` (기존 로컬 저장 데이터 리셋됨)
+  - 모든 문서 (CLAUDE.md, README.md, docs/) SOLARIS 언급 전부 교체
+- **UI 텍스트 조정**:
+  - `<title>` / h1: SOLARIS → LODESTAR
+  - 서브타이틀: "사방에서 몰려오는 적을 격파" → "사방에서 떠오는 우주 광석을 채굴. 돌 → 은 → 금 → 백금 → 다이아 → 미스릴"
+  - HUD 라벨: KILL → MINED
+  - 보스 등장: "▲ BOSS" → "▲ MITHRIL CORE"
+  - 보스 처치: "BOSS DOWN" → "CORE MINED"
+- **사용자 수동 작업 대기** (Vercel/GA4는 API 없음):
+  - Vercel Project 리네임 (URL도 `lodestar-xxxx.vercel.app`으로)
+  - GA4 속성명 SOLARIS → LODESTAR
+  - GitHub About Website 필드 새 Vercel URL로 교체
+- 이유: 컨셉이 완전 바뀌었으니 이름·인프라 모두 통일. 지금이 유저 트래픽 아직 없어서 리브랜드 손실 제로.

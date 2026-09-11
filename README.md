@@ -1,8 +1,8 @@
-# SOLARIS
+# LODESTAR
 
-A minimalist Vampire Survivors-like browser game. Pure HTML5 Canvas, no build step. Built entirely with [Claude Code](https://claude.com/claude-code).
+A minimalist cosmic-mining bullet-heaven browser game. Pure HTML5 Canvas, no build step. Built entirely with [Claude Code](https://claude.com/claude-code).
 
-**Live**: <https://solaris-lime-nine.vercel.app>
+Chase and shatter drifting space ores — pebbles, silver, gold, platinum, diamond, and the rare mithril core. Auto-firing weapons handle most of the work; you steer.
 
 ## Play
 
@@ -11,12 +11,12 @@ Open `index.html` directly in any modern browser — no install, no build requir
 ## Controls
 
 - **WASD** / arrow keys — Move
-- **SPACE** or **left click** — Basic attack
+- **SPACE** or **left click** — Basic mining shot
 - All other weapons fire automatically
 
 ## Stack
 
-- Single `index.html` (~1500 lines, HTML + CSS + JS inline)
+- Single `index.html` (~1600 lines, HTML + CSS + JS inline)
 - Canvas 2D API for rendering, procedural Web Audio for SFX
 - Zero dependencies, zero build tools, zero framework
 - Auto-deployed to Vercel on `main` push, tracked with Google Analytics 4
@@ -36,4 +36,4 @@ If you're an AI coding agent (Claude Code, Cursor, Codex…):
 
 ## Status
 
-Beta · v0.7 · actively iterating.
+Beta · v0.8 · actively iterating. Previously known as SOLARIS (rebranded 2026-09-11 when concept shifted from cosmic defense to cosmic mining).

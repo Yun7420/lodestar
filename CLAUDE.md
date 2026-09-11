@@ -1,4 +1,4 @@
-# CLAUDE.md — SOLARIS 프로젝트 진입점
+# CLAUDE.md — LODESTAR 프로젝트 진입점
 
 이 파일은 **Claude Code가 프로젝트를 열 때 자동으로 읽는 파일**입니다.
 새 세션·다른 컴퓨터·아무 상황에서도 이 파일이 첫 진입점이 됩니다.
@@ -7,14 +7,18 @@
 
 ## 이 프로젝트가 뭐예요?
 
-**SOLARIS** — 사용자가 AI(주로 Claude Code)로 만들고 있는 개인 게임 프로젝트.
+**LODESTAR** — 사용자가 AI(주로 Claude Code)로 만들고 있는 개인 게임 프로젝트.
 
 - **장르**: Vampire Survivors-like 브라우저 게임 (뱀서라이크, bullet heaven)
+- **컨셉**: 우주 광부. 사방에서 떠오는 광석(돌→은→금→백금→다이아→미스릴 코어) 채굴
 - **스택**: 단일 `index.html` (Canvas 2D + vanilla JS + procedural Web Audio, **의존성 0**)
-- **Live**: https://solaris-lime-nine.vercel.app
-- **Repo**: https://github.com/Yun7420/solaris
-- **분석**: Google Analytics 4 (`G-E6FJ175S19`)
+- **Live**: (Vercel 리네임 후 갱신 예정 — 사용자가 직접 변경)
+- **Repo**: https://github.com/Yun7420/lodestar (2026-09-11 리네임, 옛 solaris URL은 자동 리다이렉트)
+- **분석**: Google Analytics 4 (`G-E6FJ175S19`, 속성명 GA4 UI에서 LODESTAR로 리네임 필요)
 - **호스팅**: Vercel Hobby (GitHub `main` push 시 자동 재배포)
+
+### 이름 히스토리
+초기 명 `pest-hunter` (해충 박멸 컨셉) → `SOLARIS` (우주 방위대) → **`LODESTAR`** (우주 광부). 리브랜드 이유는 컨셉 전환. v0.8 시점 완전 통일.
 
 ---
 
@@ -34,7 +38,7 @@
 
 - **미니멀**: 롱카피·장식적 명명 금지. "선체 강화" X → "체력" O.
 - **세련됨**: 아기같음·이모지 남발 X. 딥 네이비 + 시안/바이올렛/앰버 팔레트 유지.
-- **자동 + 액티브 혼합**: 무기 자동 발사가 기본, SPACE/좌클릭은 기본 공격 예외.
+- **자동 + 액티브 혼합**: 무기 자동 발사가 기본, SPACE/좌클릭은 기본 공격(채굴 빔) 예외.
 - **한국어 존댓말**, 짧고 단호하게. 결과·트레이드오프만 간결히.
 - **매번 확인 남발 금지**: 방향 명확하면 바로 실행, 결과·스크린샷으로 확인 받기.
 - **이모지**: 사용자 요청 없으면 UI/코드/텍스트에 남발 금지.
@@ -57,12 +61,12 @@
 
 이 맥 기준 로컬 경로:
 ```
-/Users/hansang-yun/Documents/한상윤/project/solaris/
+/Users/hansang-yun/Documents/한상윤/project/lodestar/
 ```
 
 다른 컴퓨터에서는:
 ```bash
-git clone https://github.com/Yun7420/solaris.git
+git clone https://github.com/Yun7420/lodestar.git
 ```
 
 ---
