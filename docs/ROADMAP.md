@@ -5,7 +5,63 @@
 
 ---
 
-## ✅ 완료된 작업 (v0.1 → v0.8)
+## 🎯 NEXT SESSION — 이 프로젝트 이어받는 AI가 먼저 볼 것
+
+**마지막 세션 종료 시점**: 2026-09-13, v0.9까지 완료 (리브랜드 마이그레이션 종료). 사용자가 급한 일로 잠시 중단.
+
+**사용자가 "이어서 하자" / "LODESTAR 이어서" 등 재개 신호를 보내면 이 순서로**:
+1. `CLAUDE.md` → `docs/AI_HANDOFF.md` (특히 §6 유저 취향) → 이 파일 읽기
+2. 아래 후보 A~D 중 1~2개를 짧게 제안 (`AskUserQuestion` 3~4개 옵션 · 첫 옵션 "(추천)")
+3. 사용자 선택 후 바로 실행 (매번 확인 남발 금지)
+
+### 지금 시점 최우선 후보 4개
+
+**후보 A · 커스텀 GA4 이벤트 추가 (추천 · 15분)**
+> 데이터 기반 결정을 위한 필수 인프라. 밸런스 튜닝의 근거가 여기서 나옴.
+- 만질 곳: `index.html` 내 `startGame()`, `onDeath()`, `killEnemy()`(보스 분기), `applyChoice()`, `buyUpgrade()`
+- 심을 이벤트:
+  ```js
+  gtag('event', 'game_start')
+  gtag('event', 'game_over', { time_seconds, mined_count, level, gold_earned })
+  gtag('event', 'core_mined', { minute })   // 미스릴 처치
+  gtag('event', 'upgrade_buy', { upgrade_id, new_level })
+  gtag('event', 'level_up', { new_level, weapon_picked })
+  ```
+- 심고 나면 GA4 → 보고서 → 참여도 → 이벤트에서 24시간 뒤 확인 가능
+
+**후보 B · 밸런스 튜닝 (30분 · 재미 직결)**
+> v0.8 광석 티어 HP를 대폭 올림(pebble 8 → mithril 800). 초반이 답답하거나 후반이 너무 쉬울 수 있음.
+- 튜닝 포인트: `ENEMY_DEFS` hp/speed/gold, `currentSpawnMix` 타이밍, `SHOP_ITEMS` cost 곡선
+- 사용자에게 실제 30분 플레이 후 어느 지점이 답답한지 알려달라 요청 → 조정 → push (Vercel 자동 재배포)
+- **후보 A와 함께 하면 최고** (A 심고 → 데이터 쌓이고 → B에서 데이터 근거로 조정)
+
+**후보 C · 마우스 조준 리티클 (10분 · UX 즉시 개선)**
+> 클릭 공격 피드백 강화. 지금은 클릭해도 커서만 보임.
+- 만질 곳: `index.html`의 `render()` 마지막 부분
+- `mouse.x`, `mouse.y` 이미 트래킹 중 (input 섹션, Line 480 근처)
+- 십자선 or 반투명 원 그리기. 마우스가 캔버스 위에 있을 때만.
+
+**후보 D · itch.io 배포 (30분 · 마케팅 시작)**
+> 첫 유저 유입 실험. 웹게임 커뮤니티 트래픽.
+- itch.io 계정 만들고 → New Project → HTML 선택 → `index.html` 단일 파일 업로드 (또는 zip)
+- 태그: `survivor`, `action`, `free`, `html5`, `browser`, `mining`, `bullet-heaven`
+- 썸네일: 게임 스크린샷 하나 (Playwright로 찍어서 첨부 가능)
+- 완료 후 GA4에서 itch 유입 트래픽 확인
+
+### 추천 진행 순서
+- **가장 논리적**: A → B (데이터 심고 → 그 데이터로 튜닝)
+- **가장 즉각적 만족**: C → A → B (UX 먼저 개선, 계측, 튜닝)
+- **마케팅 우선**: D는 A/B/C 어느 정도 안정된 뒤에
+
+### 사용자 컨텍스트
+- 사용자는 완벽 결과보다 반복 개선 선호 (매번 확인받지 말고 만들고 스크린샷)
+- 결정 필요할 땐 `AskUserQuestion` 3~4 옵션 (첫 옵션 "(추천)")
+- 이모지/롱카피/장식적 명명 금지. 미니멀 유지.
+- 인프라(GitHub/Vercel/GA4) 이미 다 세팅됨. push하면 자동 재배포.
+
+---
+
+## ✅ 완료된 작업 (v0.1 → v0.9)
 
 - [x] **v0.1** 초기 MVP (해충 박멸 컨셉, 5무기 6몹)
 - [x] **v0.2** Juice pass (사운드·파티클·콤보·화면 이펙트)
@@ -15,6 +71,7 @@
 - [x] **v0.6** Vercel 자동 배포 + GA4 계측
 - [x] **v0.7** 이식성 있는 문서 구조 (CLAUDE.md + docs/)
 - [x] **v0.8** 채굴 리브랜드 (SOLARIS → LODESTAR, 몹 → 6단계 광석 티어)
+- [x] **v0.9** 인프라 마이그레이션 완결 (Vercel/GA4/GitHub About/도메인 모두 lodestar 통일)
 
 자세한 내역은 `AI_HANDOFF.md §11` 참조.
 
