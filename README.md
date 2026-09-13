@@ -2,6 +2,8 @@
 
 A minimalist cosmic-mining bullet-heaven browser game. Pure HTML5 Canvas, no build step. Built entirely with [Claude Code](https://claude.com/claude-code).
 
+**Live**: <https://lodestar-lime-nine.vercel.app>
+
 Chase and shatter drifting space ores — pebbles, silver, gold, platinum, diamond, and the rare mithril core. Auto-firing weapons handle most of the work; you steer.
 
 ## Play

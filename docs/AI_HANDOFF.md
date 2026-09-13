@@ -12,7 +12,7 @@
 
 - **게임명**: LODESTAR
 - **현재 버전**: v0.8
-- **Live**: Vercel 리네임 대기 (구 URL `https://solaris-lime-nine.vercel.app` — 사용자가 Vercel 대시보드에서 `lodestar`로 리네임하면 새 URL 발급)
+- **Live**: https://lodestar-lime-nine.vercel.app (Vercel Hobby, 2026-09-13 리네임 완료; 옛 `solaris-lime-nine.vercel.app` 도메인은 완전 삭제)
 - **Repo**: https://github.com/Yun7420/lodestar (2026-09-11 리네임, 옛 solaris URL은 GitHub이 자동 리다이렉트)
 - **GA4**: `G-E6FJ175S19` (속성명은 GA4 UI에서 `LODESTAR`로 리네임 필요, 측정 ID와 데이터는 유지)
 
@@ -290,7 +290,7 @@ cd lodestar
 - `.gitignore` + `README.md` 작성
 
 ### v0.6 (2026-09-10) — 라이브 배포 · 계측 시작
-- **Vercel 배포 완료**: https://solaris-lime-nine.vercel.app (Hobby 플랜, 자동 재배포)
+- **Vercel 배포 완료**: https://lodestar-lime-nine.vercel.app (Hobby 플랜, 자동 재배포)
 - **Google Analytics 4 심음** — `G-E6FJ175S19` (SOLARIS 속성, 대한민국, KRW, 향상된 측정 ON)
 - 자동 계측: 페이지뷰, 스크롤, 외부 링크 클릭, 이탈 클릭, 세션 지속시간
 - GitHub About의 Website 필드에 Vercel URL 노출

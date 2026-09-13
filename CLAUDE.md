@@ -12,7 +12,7 @@
 - **장르**: Vampire Survivors-like 브라우저 게임 (뱀서라이크, bullet heaven)
 - **컨셉**: 우주 광부. 사방에서 떠오는 광석(돌→은→금→백금→다이아→미스릴 코어) 채굴
 - **스택**: 단일 `index.html` (Canvas 2D + vanilla JS + procedural Web Audio, **의존성 0**)
-- **Live**: (Vercel 리네임 후 갱신 예정 — 사용자가 직접 변경)
+- **Live**: https://lodestar-lime-nine.vercel.app (옛 solaris 도메인은 v0.9에서 완전 삭제)
 - **Repo**: https://github.com/Yun7420/lodestar (2026-09-11 리네임, 옛 solaris URL은 자동 리다이렉트)
 - **분석**: Google Analytics 4 (`G-E6FJ175S19`, 속성명 GA4 UI에서 LODESTAR로 리네임 필요)
 - **호스팅**: Vercel Hobby (GitHub `main` push 시 자동 재배포)

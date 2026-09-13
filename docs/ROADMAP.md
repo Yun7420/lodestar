@@ -22,9 +22,10 @@
 
 ## 🔧 v0.8 후속 · 사용자님이 직접 해야 하는 것
 
-- [ ] **Vercel 프로젝트 리네임** — Dashboard → `solaris` 프로젝트 → Settings → General → Project Name을 `lodestar`로 변경. URL이 `lodestar-xxxx.vercel.app`으로 바뀜.
+- [x] **Vercel 프로젝트 리네임 + 옛 도메인 삭제** (2026-09-13) — `solaris` → `lodestar`. 새 URL `lodestar-lime-nine.vercel.app` 발급. 옛 `solaris-lime-nine.vercel.app`는 완전 삭제 (트래픽 없어서 손실 0).
 - [ ] **GA4 속성 리네임** — analytics.google.com → 하단 관리 → 속성 설정 → 속성 이름 `SOLARIS` → `LODESTAR`. 측정 ID `G-E6FJ175S19`와 데이터는 그대로 유지.
-- [ ] **GitHub About 업데이트** — Vercel 리네임 후 새 URL로 Website 필드 갱신. Description·Topics도 채굴 컨셉 반영.
+- [ ] **GitHub About 업데이트** — Website 필드를 `https://lodestar-lime-nine.vercel.app`로 갱신. Description·Topics도 채굴 컨셉 반영 (예: `mining-game` 추가).
+- [ ] **GA4 데이터 스트림 URL 업데이트** (선택) — Admin → Data streams → SOLARIS Web → 스트림 URL을 새 URL로. 향상된 측정 정확도용, 필수 아님.
 
 ---
 
