@@ -22,10 +22,12 @@
 
 ## 🔧 v0.8 후속 · 사용자님이 직접 해야 하는 것
 
-- [x] **Vercel 프로젝트 리네임 + 옛 도메인 삭제** (2026-09-13) — `solaris` → `lodestar`. 새 URL `lodestar-lime-nine.vercel.app` 발급. 옛 `solaris-lime-nine.vercel.app`는 완전 삭제 (트래픽 없어서 손실 0).
-- [ ] **GA4 속성 리네임** — analytics.google.com → 하단 관리 → 속성 설정 → 속성 이름 `SOLARIS` → `LODESTAR`. 측정 ID `G-E6FJ175S19`와 데이터는 그대로 유지.
-- [ ] **GitHub About 업데이트** — Website 필드를 `https://lodestar-lime-nine.vercel.app`로 갱신. Description·Topics도 채굴 컨셉 반영 (예: `mining-game` 추가).
-- [ ] **GA4 데이터 스트림 URL 업데이트** (선택) — Admin → Data streams → SOLARIS Web → 스트림 URL을 새 URL로. 향상된 측정 정확도용, 필수 아님.
+- [x] **Vercel 프로젝트 리네임 + 옛 도메인 삭제** (2026-09-13) — `solaris` → `lodestar`. 새 URL `lodestar-lime-nine.vercel.app` 발급. 옛 `solaris-lime-nine.vercel.app`는 완전 삭제.
+- [x] **GA4 속성 리네임** (2026-09-13) — 속성명 SOLARIS → LODESTAR. 측정 ID `G-E6FJ175S19`, 스트림 ID `15751201786`, 기존 데이터 모두 유지.
+- [x] **GA4 데이터 스트림 리네임** (2026-09-13) — 스트림 이름 SOLARIS Web → LODESTAR Web, 스트림 URL도 새 URL로.
+- [x] **GitHub About 업데이트** (2026-09-13) — Website 필드 새 URL 반영, Topics에 `mining-game` 추가 완료.
+
+**v0.9 마이그레이션 완결 상태**: 인프라·문서·서비스명 모두 LODESTAR로 완전 통일.
 
 ---
 
